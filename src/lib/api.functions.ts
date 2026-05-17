@@ -166,14 +166,29 @@ export const adminListPending = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await assertAdmin(context.userId);
     const [deps, withs, users] = await Promise.all([
-      supabaseAdmin.from("deposits").select("*, profile:profiles(full_name, phone)")
+      supabaseAdmin.from("deposits").select("*")
         .eq("status", "pending").order("created_at", { ascending: false }),
-      supabaseAdmin.from("withdrawals").select("*, profile:profiles(full_name, phone)")
+      supabaseAdmin.from("withdrawals").select("*")
         .eq("status", "pending").order("created_at", { ascending: false }),
       supabaseAdmin.from("profiles").select("id, full_name, phone, balance, total_earned, created_at")
         .order("created_at", { ascending: false }).limit(50),
     ]);
-    return { deposits: deps.data ?? [], withdrawals: withs.data ?? [], users: users.data ?? [] };
+    const userIds = Array.from(new Set([
+      ...(deps.data ?? []).map((d: any) => d.user_id),
+      ...(withs.data ?? []).map((w: any) => w.user_id),
+    ]));
+    const profMap = new Map<string, { full_name: string; phone: string }>();
+    if (userIds.length) {
+      const { data: profs } = await supabaseAdmin.from("profiles")
+        .select("id, full_name, phone").in("id", userIds);
+      (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, phone: p.phone }));
+    }
+    const attach = (rows: any[]) => rows.map((r) => ({ ...r, profile: profMap.get(r.user_id) ?? null }));
+    return {
+      deposits: attach(deps.data ?? []),
+      withdrawals: attach(withs.data ?? []),
+      users: users.data ?? [],
+    };
   });
 
 export const adminApproveDeposit = createServerFn({ method: "POST" })

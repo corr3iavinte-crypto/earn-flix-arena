@@ -1,0 +1,188 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  --background: oklch(0.985 0.005 60);
+  --foreground: oklch(0.2 0.02 50);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.02 50);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.02 50);
+
+  /* Orange brand */
+  --primary: oklch(0.7 0.2 45);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-glow: oklch(0.78 0.18 55);
+
+  --secondary: oklch(0.96 0.01 60);
+  --secondary-foreground: oklch(0.25 0.03 50);
+
+  --muted: oklch(0.96 0.01 60);
+  --muted-foreground: oklch(0.5 0.02 50);
+
+  --accent: oklch(0.95 0.04 55);
+  --accent-foreground: oklch(0.3 0.1 45);
+
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.62 0.17 150);
+  --success-foreground: oklch(0.99 0 0);
+
+  --warning: oklch(0.75 0.18 70);
+  --warning-foreground: oklch(0.2 0.02 50);
+
+  --info: oklch(0.62 0.16 230);
+  --info-foreground: oklch(0.99 0 0);
+
+  --danger: oklch(0.62 0.22 30);
+  --danger-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.92 0.01 60);
+  --input: oklch(0.93 0.01 60);
+  --ring: oklch(0.7 0.2 45);
+
+  --sidebar: oklch(0.18 0.02 50);
+  --sidebar-foreground: oklch(0.95 0.01 60);
+  --sidebar-accent: oklch(0.25 0.03 50);
+  --sidebar-border: oklch(0.28 0.03 50);
+
+  --gradient-primary: linear-gradient(135deg, oklch(0.7 0.2 45), oklch(0.78 0.18 55));
+  --gradient-header: linear-gradient(120deg, oklch(0.72 0.2 45), oklch(0.78 0.18 60));
+  --gradient-card-orange: linear-gradient(135deg, oklch(0.7 0.2 45), oklch(0.78 0.18 60));
+  --gradient-card-purple: linear-gradient(135deg, oklch(0.7 0.2 45), oklch(0.78 0.18 60));
+  --shadow-card: 0 2px 8px -2px oklch(0.5 0.05 50 / 0.08), 0 1px 3px -1px oklch(0.5 0.05 50 / 0.05);
+  --shadow-elegant: 0 10px 30px -12px oklch(0.7 0.2 45 / 0.3);
+}
+
+.dark {
+  --background: oklch(0.16 0.02 50);
+  --foreground: oklch(0.97 0.01 60);
+  --card: oklch(0.22 0.02 50);
+  --card-foreground: oklch(0.97 0.01 60);
+  --popover: oklch(0.22 0.02 50);
+  --popover-foreground: oklch(0.97 0.01 60);
+  --primary: oklch(0.72 0.2 50);
+  --primary-foreground: oklch(0.16 0.02 50);
+  --secondary: oklch(0.28 0.03 50);
+  --secondary-foreground: oklch(0.97 0.01 60);
+  --muted: oklch(0.28 0.03 50);
+  --muted-foreground: oklch(0.7 0.02 60);
+  --accent: oklch(0.32 0.06 50);
+  --accent-foreground: oklch(0.97 0.01 60);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.72 0.2 50);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html, body {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-primary { background-image: var(--gradient-primary); }
+  .bg-gradient-header { background-image: var(--gradient-header); }
+  .bg-gradient-card-purple { background-image: var(--gradient-card-orange); }
+  .bg-gradient-card-orange { background-image: var(--gradient-card-orange); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+}
+
+@keyframes vip-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes vip-shine {
+  0% { transform: translate(-30%, -30%) rotate(0deg); }
+  100% { transform: translate(30%, 30%) rotate(360deg); }
+}
+@keyframes vip-pulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(2); }
+}
+@keyframes vip-sweep {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(220%) skewX(-20deg); }
+}
+@keyframes vip-conic {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes vip-float {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+  50% { transform: translateY(-12px) translateX(6px); opacity: 1; }
+}
+@keyframes vip-ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+@layer utilities {
+  .animate-vip-bg { animation: vip-bg 5s ease infinite; }
+  .animate-vip-shine { animation: vip-shine 8s linear infinite; }
+  .animate-vip-pulse { animation: vip-pulse 1.8s ease-in-out infinite; }
+  .animate-vip-sweep { animation: vip-sweep 3.5s ease-in-out infinite; }
+  .animate-vip-conic { animation: vip-conic 10s linear infinite; }
+  .animate-vip-float { animation: vip-float 3.5s ease-in-out infinite; }
+  .animate-vip-ring { animation: vip-ring 2.6s ease-out infinite; }
+}

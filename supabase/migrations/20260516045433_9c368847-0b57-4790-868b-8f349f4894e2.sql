@@ -1,0 +1,1 @@
+UPDATE public.plans SET image_url='/netflix-bg.jpg';

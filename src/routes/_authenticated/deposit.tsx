@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { formatMZN } from "@/lib/format";
 import { toast } from "sonner";
-import { Upload, Smartphone } from "lucide-react";
+import { Upload, Smartphone, Copy } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/deposit")({ component: Deposit });
 

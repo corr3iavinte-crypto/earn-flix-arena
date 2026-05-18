@@ -112,12 +112,14 @@ export const requestDeposit = createServerFn({ method: "POST" })
     method: z.string().min(1).max(50),
     amount: z.number().min(100).max(10000000),
     screenshotPath: z.string().min(1).max(500),
+    confirmationMessage: z.string().max(2000).optional(),
   }).parse(d))
   .handler(async ({ data, context }) => {
     const { userId } = context;
     await supabaseAdmin.from("deposits").insert({
       user_id: userId, method: data.method, amount: data.amount,
       screenshot_url: data.screenshotPath, status: "pending",
+      confirmation_message: data.confirmationMessage ?? null,
     });
     return { success: true };
   });

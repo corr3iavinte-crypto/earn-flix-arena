@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { getDashboard, getTasks } from "@/lib/api.functions";
 import { formatMZN } from "@/lib/format";
 import { CheckInCard } from "@/components/CheckInCard";
+import { FloatingPromos } from "@/components/FloatingPromos";
 import {
   Volume2, Building2, Mail, Wallet, ArrowUpRight, Users, Star, Play, Trophy,
 } from "lucide-react";

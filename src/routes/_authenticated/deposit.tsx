@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { formatMZN } from "@/lib/format";
 import { toast } from "sonner";
-import { Upload, Smartphone } from "lucide-react";
+import { Upload, Smartphone, Copy } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/deposit")({ component: Deposit });
 
@@ -22,24 +22,35 @@ function Deposit() {
   const [method, setMethod] = useState("mpesa");
   const [amount, setAmount] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
   const reqFn = useServerFn(requestDeposit);
   const myFn = useServerFn(getMyRequests);
   const { data: my } = useQuery({ queryKey: ["my-requests"], queryFn: () => myFn() });
 
+  const copyNumber = async (num: string) => {
+    try {
+      await navigator.clipboard.writeText(num);
+      toast.success(`Número ${num} copiado!`);
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
+  };
+
   const submit = async () => {
     const amt = Number(amount);
     if (!amt || amt < 100) { toast.error("Valor mínimo: 100 MZN"); return; }
     if (!file) { toast.error("Anexe o comprovativo"); return; }
+    if (!confirmationMessage.trim()) { toast.error("Cole a mensagem de confirmação da transferência"); return; }
     setBusy(true);
     try {
       const path = `${user!.id}/${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, "_")}`;
       const { error } = await supabase.storage.from("payment-proofs").upload(path, file);
       if (error) throw error;
-      await reqFn({ data: { method, amount: amt, screenshotPath: path } });
+      await reqFn({ data: { method, amount: amt, screenshotPath: path, confirmationMessage: confirmationMessage.trim() } });
       toast.success("Depósito enviado! Aguarde aprovação.");
-      setAmount(""); setFile(null);
+      setAmount(""); setFile(null); setConfirmationMessage("");
       qc.invalidateQueries();
     } catch (e: any) {
       toast.error(e?.message ?? "Erro");
@@ -66,7 +77,16 @@ function Deposit() {
 
       <div className="rounded-2xl border-l-4 border-primary bg-card p-4 shadow-card">
         <div className="text-xs uppercase tracking-wider text-muted-foreground">Envie para {selected.name}</div>
-        <div className="mt-1 text-2xl font-extrabold tracking-wider text-primary">{selected.number}</div>
+        <div className="mt-1 flex items-center justify-between gap-2">
+          <div className="text-2xl font-extrabold tracking-wider text-primary">{selected.number}</div>
+          <button
+            type="button"
+            onClick={() => copyNumber(selected.number)}
+            className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow hover:opacity-90 active:scale-95"
+          >
+            <Copy className="h-3.5 w-3.5" /> Copiar
+          </button>
+        </div>
         <div className="mt-1 text-sm font-semibold">Titular: {selected.holder}</div>
       </div>
 
@@ -74,6 +94,15 @@ function Deposit() {
         <label className="text-sm font-semibold">Valor (MZN)</label>
         <input type="number" min="100" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Ex: 650"
           className="w-full rounded-xl border bg-muted/50 px-4 py-3 outline-none" />
+
+        <label className="block text-sm font-semibold pt-2">Mensagem de confirmação da transferência</label>
+        <textarea
+          value={confirmationMessage}
+          onChange={(e) => setConfirmationMessage(e.target.value)}
+          rows={4}
+          placeholder="Cole aqui a SMS de confirmação do M-Pesa / e-Mola (ID da transação, valor, número, etc.)"
+          className="w-full rounded-xl border bg-muted/50 px-4 py-3 outline-none text-sm"
+        />
 
         <label className="block text-sm font-semibold pt-2">Comprovativo (foto)</label>
         <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/40 bg-card px-4 py-6 text-sm text-muted-foreground hover:bg-primary/5">

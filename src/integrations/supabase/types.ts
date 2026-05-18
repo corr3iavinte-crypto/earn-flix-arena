@@ -45,6 +45,7 @@ export type Database = {
         Row: {
           admin_note: string | null
           amount: number
+          confirmation_message: string | null
           created_at: string
           id: string
           method: string
@@ -57,6 +58,7 @@ export type Database = {
         Insert: {
           admin_note?: string | null
           amount: number
+          confirmation_message?: string | null
           created_at?: string
           id?: string
           method: string
@@ -69,6 +71,7 @@ export type Database = {
         Update: {
           admin_note?: string | null
           amount?: number
+          confirmation_message?: string | null
           created_at?: string
           id?: string
           method?: string

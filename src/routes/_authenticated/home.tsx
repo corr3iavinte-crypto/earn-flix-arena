@@ -51,6 +51,9 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Floating promo cards */}
+      <FloatingPromos />
+
       {/* Quick actions */}
       <section className="grid grid-cols-6 gap-2">
         {QUICK.map((q) => (

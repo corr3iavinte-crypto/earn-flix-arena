@@ -37,7 +37,7 @@ export function AIChat() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Abrir chat"
-        className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-700 text-white shadow-elegant hover:scale-110 transition-transform"
+        className="fixed bottom-44 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-700 text-white shadow-elegant hover:scale-110 transition-transform"
       >
         <MessageCircle className="h-6 w-6" />
         <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-success text-[10px] font-black">AI</span>

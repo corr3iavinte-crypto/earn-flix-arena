@@ -107,6 +107,12 @@ function DepositCard({ d, onApprove }: { d: any; onApprove: (a: boolean) => void
           <button onClick={() => onApprove(false)} className="rounded-lg bg-destructive p-2 text-destructive-foreground"><X className="h-4 w-4" /></button>
         </div>
       </div>
+      {d.confirmation_message && (
+        <div className="mt-2 whitespace-pre-wrap rounded-lg bg-muted p-2 text-xs text-foreground">
+          <div className="mb-1 font-bold uppercase text-muted-foreground">Mensagem do cliente</div>
+          {d.confirmation_message}
+        </div>
+      )}
       {imgUrl && (
         <div className="mt-3">
           <img src={imgUrl} alt="comprovativo" className="max-h-72 w-auto rounded-lg border" />

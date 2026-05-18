@@ -22,24 +22,35 @@ function Deposit() {
   const [method, setMethod] = useState("mpesa");
   const [amount, setAmount] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
   const reqFn = useServerFn(requestDeposit);
   const myFn = useServerFn(getMyRequests);
   const { data: my } = useQuery({ queryKey: ["my-requests"], queryFn: () => myFn() });
 
+  const copyNumber = async (num: string) => {
+    try {
+      await navigator.clipboard.writeText(num);
+      toast.success(`Número ${num} copiado!`);
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
+  };
+
   const submit = async () => {
     const amt = Number(amount);
     if (!amt || amt < 100) { toast.error("Valor mínimo: 100 MZN"); return; }
     if (!file) { toast.error("Anexe o comprovativo"); return; }
+    if (!confirmationMessage.trim()) { toast.error("Cole a mensagem de confirmação da transferência"); return; }
     setBusy(true);
     try {
       const path = `${user!.id}/${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, "_")}`;
       const { error } = await supabase.storage.from("payment-proofs").upload(path, file);
       if (error) throw error;
-      await reqFn({ data: { method, amount: amt, screenshotPath: path } });
+      await reqFn({ data: { method, amount: amt, screenshotPath: path, confirmationMessage: confirmationMessage.trim() } });
       toast.success("Depósito enviado! Aguarde aprovação.");
-      setAmount(""); setFile(null);
+      setAmount(""); setFile(null); setConfirmationMessage("");
       qc.invalidateQueries();
     } catch (e: any) {
       toast.error(e?.message ?? "Erro");

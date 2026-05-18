@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { getDashboard, getTasks } from "@/lib/api.functions";
 import { formatMZN } from "@/lib/format";
 import { CheckInCard } from "@/components/CheckInCard";
+import { FloatingPromos } from "@/components/FloatingPromos";
 import {
   Volume2, Building2, Mail, Wallet, ArrowUpRight, Users, Star, Play, Trophy,
 } from "lucide-react";
@@ -49,6 +50,9 @@ function HomePage() {
           Bem-vindo à <b>Netflilms</b> — convide amigos, invista e ganhe lucros diários ilimitados.
         </div>
       </section>
+
+      {/* Floating promo cards */}
+      <FloatingPromos />
 
       {/* Quick actions */}
       <section className="grid grid-cols-6 gap-2">

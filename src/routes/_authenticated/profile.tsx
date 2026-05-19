@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { getDashboard } from "@/lib/api.functions";
 import { useAuth } from "@/lib/auth-context";
 import { formatMZN } from "@/lib/format";
-import { LogOut, User, Phone, Hash, Calendar, Mail, Shield } from "lucide-react";
+import { LogOut, User, Phone, Hash, Calendar, Mail, Shield, Crown } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/profile")({ component: Profile });
@@ -16,6 +16,7 @@ function Profile() {
   const fn = useServerFn(getDashboard);
   const { data, isLoading } = useQuery({ queryKey: ["dashboard"], queryFn: () => fn() });
   const p = data?.profile;
+  const activePlans = (data as any)?.activePlans ?? [];
   const created = p?.created_at ? new Date(p.created_at).toLocaleDateString() : "—";
 
   return (
@@ -29,6 +30,37 @@ function Profile() {
         <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs">
           <Shield className="h-3 w-3" /> ID: {p?.referral_code ?? "—"}
         </div>
+      </div>
+
+      {/* Active VIP plans */}
+      <div className="rounded-2xl bg-card p-4 shadow-card">
+        <div className="mb-2 flex items-center gap-2">
+          <Crown className="h-5 w-5 text-primary" />
+          <h3 className="text-sm font-extrabold uppercase tracking-wider">VIP Ativo</h3>
+        </div>
+        {activePlans.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Sem plano VIP ativo. Adquira um plano para começar a ganhar.</p>
+        ) : (
+          <div className="space-y-2">
+            {activePlans.map((up: any) => {
+              const plan = up.plan ?? {};
+              const accent = plan.accent_color?.startsWith("#") ? plan.accent_color : "#f97316";
+              const expires = up.expires_at ? new Date(up.expires_at).toLocaleDateString() : "—";
+              return (
+                <div key={up.id} className="rounded-xl p-3 text-white" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}cc)` }}>
+                  <div className="flex items-center justify-between">
+                    <div className="font-black">{plan.name}</div>
+                    <span className="rounded-full bg-white/25 px-2 py-0.5 text-[10px] font-bold">ATIVO</span>
+                  </div>
+                  <div className="mt-1 grid grid-cols-2 gap-2 text-xs">
+                    <div>Diário: <b>MT {Number(plan.daily_return ?? 0).toLocaleString("pt-PT")}</b></div>
+                    <div>Expira: <b>{expires}</b></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-3 gap-2">

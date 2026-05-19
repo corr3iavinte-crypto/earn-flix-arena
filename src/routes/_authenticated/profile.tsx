@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { getDashboard } from "@/lib/api.functions";
 import { useAuth } from "@/lib/auth-context";
 import { formatMZN } from "@/lib/format";
-import { LogOut, User, Phone, Hash, Calendar, Mail, Shield } from "lucide-react";
+import { LogOut, User, Phone, Hash, Calendar, Mail, Shield, Crown } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/profile")({ component: Profile });

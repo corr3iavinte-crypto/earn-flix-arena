@@ -16,6 +16,7 @@ function Profile() {
   const fn = useServerFn(getDashboard);
   const { data, isLoading } = useQuery({ queryKey: ["dashboard"], queryFn: () => fn() });
   const p = data?.profile;
+  const activePlans = (data as any)?.activePlans ?? [];
   const created = p?.created_at ? new Date(p.created_at).toLocaleDateString() : "—";
 
   return (

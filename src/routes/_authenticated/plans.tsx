@@ -20,7 +20,11 @@ function Plans() {
   const [confirmPlan, setConfirmPlan] = useState<any | null>(null);
 
   const buy = useMutation({
-    mutationFn: async (plan: any) => { await buyFn({ data: { planId: plan.id } }); return plan; },
+    mutationFn: async (plan: any) => {
+      const res: any = await buyFn({ data: { planId: plan.id } });
+      if (res && res.success === false) throw new Error(res.error || "Erro");
+      return plan;
+    },
     onSuccess: (plan) => {
       setActivated({ name: plan.name });
       toast.success(t("plans.activatedTitle"));

@@ -36,12 +36,12 @@ export const purchasePlan = createServerFn({ method: "POST" })
     const { userId } = context;
 
     const { data: plan } = await supabaseAdmin.from("plans").select("*").eq("id", data.planId).maybeSingle();
-    if (!plan || !plan.active) throw new Error("Plano não encontrado");
+    if (!plan || !plan.active) return { success: false as const, error: "Plano não encontrado" };
 
     const { data: profile } = await supabaseAdmin.from("profiles").select("balance").eq("id", userId).maybeSingle();
-    if (!profile) throw new Error("Perfil não encontrado");
+    if (!profile) return { success: false as const, error: "Perfil não encontrado" };
     if (Number(profile.balance) < Number(plan.price)) {
-      throw new Error("Saldo insuficiente. Faça um depósito primeiro.");
+      return { success: false as const, error: "Saldo insuficiente. Faça um depósito primeiro." };
     }
 
     const expiresAt = new Date(Date.now() + plan.duration_days * 86400000).toISOString();

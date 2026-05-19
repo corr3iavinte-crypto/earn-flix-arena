@@ -66,23 +66,6 @@ function Admin() {
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-2 text-sm font-bold uppercase text-muted-foreground">Utilizadores recentes ({data?.users.length ?? 0})</h2>
-        <div className="overflow-hidden rounded-xl bg-card shadow-card">
-          {(data?.users ?? []).map((u: any) => (
-            <div key={u.id} className="flex items-center justify-between border-b last:border-0 px-3 py-2.5 text-sm">
-              <div>
-                <div className="font-semibold">{u.full_name}</div>
-                <div className="text-xs text-muted-foreground">{u.phone}</div>
-              </div>
-              <div className="text-right text-xs">
-                <div className="font-bold text-primary">{formatMZN(u.balance)}</div>
-                <div className="text-muted-foreground">Ganhos: {formatMZN(u.total_earned)}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

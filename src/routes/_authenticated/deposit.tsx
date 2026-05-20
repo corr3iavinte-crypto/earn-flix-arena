@@ -47,7 +47,7 @@ function Deposit() {
       const path = `${user!.id}/${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, "_")}`;
       const { error } = await supabase.storage.from("payment-proofs").upload(path, file);
       if (error) throw error;
-      await reqFn({ data: { method, amount: amt, screenshotPath: path, confirmationMessage: confirmationMessage.trim() } });
+      await reqFn({ data: { method: method || METHODS[0]?.code || "mpesa", amount: amt, screenshotPath: path, confirmationMessage: confirmationMessage.trim() } });
       toast.success("Depósito enviado! Aguarde aprovação.");
       setAmount(""); setFile(null); setConfirmationMessage("");
       qc.invalidateQueries();

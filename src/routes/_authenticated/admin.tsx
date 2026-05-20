@@ -197,12 +197,12 @@ function MethodForm({ value, onCancel, onSave }: any) {
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 sm:items-center">
       <div className="w-full max-w-md space-y-3 rounded-2xl bg-card p-4 shadow-elegant">
         <div className="text-lg font-bold">{f.id ? "Editar método" : "Novo método"}</div>
-        <Field label="Código (mpesa, emola...)" v={f.code} on={(v) => set("code", v)} />
-        <Field label="Nome" v={f.name} on={(v) => set("name", v)} />
-        <Field label="Número" v={f.number} on={(v) => set("number", v)} />
-        <Field label="Titular" v={f.holder} on={(v) => set("holder", v)} />
-        <Field label="Cor (bg-danger, bg-warning, bg-primary)" v={f.color} on={(v) => set("color", v)} />
-        <Field label="Ordem" type="number" v={f.sort_order} on={(v) => set("sort_order", Number(v))} />
+        <Field label="Código (mpesa, emola...)" v={f.code} on={(v: any) => set("code", v)} />
+        <Field label="Nome" v={f.name} on={(v: any) => set("name", v)} />
+        <Field label="Número" v={f.number} on={(v: any) => set("number", v)} />
+        <Field label="Titular" v={f.holder} on={(v: any) => set("holder", v)} />
+        <Field label="Cor (bg-danger, bg-warning, bg-primary)" v={f.color} on={(v: any) => set("color", v)} />
+        <Field label="Ordem" type="number" v={f.sort_order} on={(v: any) => set("sort_order", Number(v))} />
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.active} onChange={(e) => set("active", e.target.checked)} /> Activo</label>
         <div className="flex gap-2 pt-2">
           <button onClick={onCancel} className="flex-1 rounded-xl bg-muted py-2 font-bold">Cancelar</button>

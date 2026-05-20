@@ -56,7 +56,7 @@ function Deposit() {
     } finally { setBusy(false); }
   };
 
-  const selected = METHODS.find((m) => m.id === method)!;
+  const selected = METHODS.find((m: any) => m.code === method) ?? METHODS[0];
 
   return (
     <div className="space-y-4">
@@ -65,29 +65,35 @@ function Deposit() {
         <p className="text-sm text-muted-foreground">Envie o pagamento e anexe o comprovativo.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        {METHODS.map((m) => (
-          <button key={m.id} onClick={() => setMethod(m.id)} className={`rounded-xl p-3 text-sm font-bold ring-2 ${method === m.id ? "ring-primary bg-primary/10" : "ring-border bg-card"}`}>
-            <div className={`mx-auto mb-1 inline-flex rounded-lg ${m.color} p-1.5 text-white`}><Smartphone className="h-4 w-4" /></div>
-            <div>{m.name}</div>
-          </button>
-        ))}
-      </div>
+      {METHODS.length === 0 ? (
+        <div className="rounded-xl bg-muted p-4 text-sm text-muted-foreground">A carregar métodos de pagamento…</div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-2">
+            {METHODS.map((m: any) => (
+              <button key={m.id} onClick={() => setMethod(m.code)} className={`rounded-xl p-3 text-sm font-bold ring-2 ${(method || METHODS[0]?.code) === m.code ? "ring-primary bg-primary/10" : "ring-border bg-card"}`}>
+                <div className={`mx-auto mb-1 inline-flex rounded-lg ${m.color} p-1.5 text-white`}><Smartphone className="h-4 w-4" /></div>
+                <div>{m.name}</div>
+              </button>
+            ))}
+          </div>
 
-      <div className="rounded-2xl border-l-4 border-primary bg-card p-4 shadow-card">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">Envie para {selected.name}</div>
-        <div className="mt-1 flex items-center justify-between gap-2">
-          <div className="text-2xl font-extrabold tracking-wider text-primary">{selected.number}</div>
-          <button
-            type="button"
-            onClick={() => copyNumber(selected.number)}
-            className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow hover:opacity-90 active:scale-95"
-          >
-            <Copy className="h-3.5 w-3.5" /> Copiar
-          </button>
-        </div>
-        <div className="mt-1 text-sm font-semibold">Titular: {selected.holder}</div>
-      </div>
+          <div className="rounded-2xl border-l-4 border-primary bg-card p-4 shadow-card">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground">Envie para {selected.name}</div>
+            <div className="mt-1 flex items-center justify-between gap-2">
+              <div className="text-2xl font-extrabold tracking-wider text-primary">{selected.number}</div>
+              <button
+                type="button"
+                onClick={() => copyNumber(selected.number)}
+                className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow hover:opacity-90 active:scale-95"
+              >
+                <Copy className="h-3.5 w-3.5" /> Copiar
+              </button>
+            </div>
+            <div className="mt-1 text-sm font-semibold">Titular: {selected.holder}</div>
+          </div>
+        </>
+      )}
 
       <div className="space-y-2">
         <label className="text-sm font-semibold">Valor (MZN)</label>

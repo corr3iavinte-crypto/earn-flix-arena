@@ -523,3 +523,188 @@ export const checkAdmin = createServerFn({ method: "GET" })
       .select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
     return { isAdmin: !!data };
   });
+
+// ============ PAYMENT METHODS (autenticados) ============
+export const getPaymentMethods = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
+    const { data } = await supabaseAdmin.from("payment_methods")
+      .select("*").eq("active", true).order("sort_order");
+    return { methods: data ?? [] };
+  });
+
+// ============ ADMIN: PAYMENT METHODS ============
+export const adminListPaymentMethods = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+    const { data } = await supabaseAdmin.from("payment_methods").select("*").order("sort_order");
+    return { methods: data ?? [] };
+  });
+
+export const adminUpsertPaymentMethod = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({
+    id: z.string().uuid().optional(),
+    code: z.string().min(1).max(30),
+    name: z.string().min(1).max(80),
+    number: z.string().min(3).max(30),
+    holder: z.string().min(1).max(80),
+    color: z.string().min(1).max(40).default("bg-primary"),
+    sort_order: z.number().int().min(0).max(999).default(0),
+    active: z.boolean().default(true),
+  }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    if (data.id) {
+      const { id, ...rest } = data;
+      await supabaseAdmin.from("payment_methods").update(rest).eq("id", id);
+    } else {
+      await supabaseAdmin.from("payment_methods").insert(data);
+    }
+    return { success: true };
+  });
+
+export const adminDeletePaymentMethod = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    await supabaseAdmin.from("payment_methods").delete().eq("id", data.id);
+    return { success: true };
+  });
+
+// ============ ADMIN: ADMINISTRADORES ============
+export const adminListAdmins = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+    const { data: roles } = await supabaseAdmin.from("user_roles")
+      .select("id, user_id, created_at").eq("role", "admin").order("created_at");
+    const ids = (roles ?? []).map(r => r.user_id);
+    if (!ids.length) return { admins: [] };
+    const { data: profs } = await supabaseAdmin.from("profiles")
+      .select("id, full_name, phone").in("id", ids);
+    const map = new Map((profs ?? []).map(p => [p.id, p]));
+    return {
+      admins: (roles ?? []).map((r: any) => ({
+        roleId: r.id, userId: r.user_id, created_at: r.created_at,
+        profile: map.get(r.user_id) ?? null,
+      })),
+    };
+  });
+
+export const adminAddAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ phone: z.string().min(6).max(20) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const clean = data.phone.replace(/\D/g, "");
+    const { data: prof } = await supabaseAdmin.from("profiles")
+      .select("id, full_name").eq("phone", clean).maybeSingle();
+    if (!prof) throw new Error("Utilizador não encontrado com esse telefone");
+    const { data: existing } = await supabaseAdmin.from("user_roles")
+      .select("id").eq("user_id", prof.id).eq("role", "admin").maybeSingle();
+    if (existing) return { success: true, alreadyAdmin: true, name: prof.full_name };
+    await supabaseAdmin.from("user_roles").insert({ user_id: prof.id, role: "admin" });
+    return { success: true, name: prof.full_name };
+  });
+
+export const adminRemoveAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ userId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    if (data.userId === context.userId) throw new Error("Não pode remover-se a si próprio");
+    await supabaseAdmin.from("user_roles").delete()
+      .eq("user_id", data.userId).eq("role", "admin");
+    return { success: true };
+  });
+
+// ============ ADMIN: SALDO ============
+export const adminSearchUsers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ query: z.string().max(80).default("") }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const q = data.query.trim();
+    const base = supabaseAdmin.from("profiles")
+      .select("id, full_name, phone, balance, total_earned, total_withdrawn, created_at");
+    const { data: users } = q
+      ? await base.or(`phone.ilike.%${q}%,full_name.ilike.%${q}%`)
+          .order("created_at", { ascending: false }).limit(30)
+      : await base.order("created_at", { ascending: false }).limit(30);
+    return { users: users ?? [] };
+  });
+
+export const adminAdjustBalance = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({
+    userId: z.string().uuid(),
+    delta: z.number().min(-10000000).max(10000000),
+    note: z.string().max(200).optional(),
+  }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    if (data.delta === 0) throw new Error("Valor deve ser diferente de zero");
+    const { data: p } = await supabaseAdmin.from("profiles")
+      .select("balance").eq("id", data.userId).maybeSingle();
+    if (!p) throw new Error("Utilizador não encontrado");
+    const newBal = Number(p.balance) + data.delta;
+    if (newBal < 0) throw new Error("Saldo final ficaria negativo");
+    await supabaseAdmin.from("profiles").update({ balance: newBal }).eq("id", data.userId);
+    await supabaseAdmin.from("transactions").insert({
+      user_id: data.userId,
+      type: data.delta > 0 ? "deposit" : "withdrawal",
+      amount: data.delta,
+      description: data.note ?? (data.delta > 0 ? "Crédito manual (admin)" : "Débito manual (admin)"),
+    });
+    return { success: true, newBalance: newBal };
+  });
+
+// ============ ADMIN: PLANOS ============
+export const adminListPlans = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+    const { data } = await supabaseAdmin.from("plans").select("*").order("sort_order");
+    return { plans: data ?? [] };
+  });
+
+export const adminUpsertPlan = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({
+    id: z.string().uuid().optional(),
+    code: z.string().min(1).max(30),
+    name: z.string().min(1).max(80),
+    price: z.number().min(0).max(10000000),
+    daily_return: z.number().min(0).max(10000000),
+    total_return: z.number().min(0).max(10000000),
+    duration_days: z.number().int().min(1).max(3650),
+    daily_tasks: z.number().int().min(1).max(1000),
+    per_task: z.number().min(0).max(10000000),
+    badge: z.string().max(30).nullable().optional(),
+    accent_color: z.string().max(40).default("primary"),
+    sort_order: z.number().int().min(0).max(999).default(0),
+    active: z.boolean().default(true),
+    image_url: z.string().max(500).nullable().optional(),
+  }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    if (data.id) {
+      const { id, ...rest } = data;
+      await supabaseAdmin.from("plans").update(rest).eq("id", id);
+    } else {
+      await supabaseAdmin.from("plans").insert(data);
+    }
+    return { success: true };
+  });
+
+export const adminDeletePlan = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    await supabaseAdmin.from("plans").delete().eq("id", data.id);
+    return { success: true };
+  });

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { requestDeposit, getMyRequests } from "@/lib/api.functions";
+import { requestDeposit, getMyRequests, getPaymentMethods } from "@/lib/api.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { formatMZN } from "@/lib/format";
@@ -11,10 +11,21 @@ import { Upload, Smartphone, Copy } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/deposit")({ component: Deposit });
 
-const METHODS = [
-  { id: "mpesa", name: "M-Pesa (Vodacom)", number: "850366384", holder: "Orlando Salange", color: "bg-danger" },
-  { id: "emola", name: "e-Mola (Movitel)", number: "872110481", holder: "Saide Omar", color: "bg-warning" },
-];
+function Deposit() {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const [method, setMethod] = useState("");
+  const [amount, setAmount] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const reqFn = useServerFn(requestDeposit);
+  const myFn = useServerFn(getMyRequests);
+  const pmFn = useServerFn(getPaymentMethods);
+  const { data: pm } = useQuery({ queryKey: ["payment-methods"], queryFn: () => pmFn() });
+  const METHODS = pm?.methods ?? [];
+  const { data: my } = useQuery({ queryKey: ["my-requests"], queryFn: () => myFn() });
 
 function Deposit() {
   const { user } = useAuth();

@@ -27,18 +27,6 @@ function Deposit() {
   const METHODS = pm?.methods ?? [];
   const { data: my } = useQuery({ queryKey: ["my-requests"], queryFn: () => myFn() });
 
-function Deposit() {
-  const { user } = useAuth();
-  const qc = useQueryClient();
-  const [method, setMethod] = useState("mpesa");
-  const [amount, setAmount] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [confirmationMessage, setConfirmationMessage] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const reqFn = useServerFn(requestDeposit);
-  const myFn = useServerFn(getMyRequests);
-  const { data: my } = useQuery({ queryKey: ["my-requests"], queryFn: () => myFn() });
 
   const copyNumber = async (num: string) => {
     try {

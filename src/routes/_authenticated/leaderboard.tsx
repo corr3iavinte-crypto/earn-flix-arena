@@ -24,7 +24,7 @@ function Leaderboard() {
           {lang === "pt" ? "Ranking de Líderes" : "Top Earners"}
         </h1>
         <p className="text-sm text-muted-foreground">
-          {lang === "pt" ? "Os investidores que mais ganharam na Netflilms" : "Top earners on Netflilms"}
+          {lang === "pt" ? "Os investidores que mais ganharam na Petromoc S.A" : "Top earners on Petromoc S.A"}
         </p>
       </div>
 

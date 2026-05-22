@@ -47,7 +47,7 @@ function HomePage() {
       <section className="flex items-center gap-3 rounded-xl border-l-4 border-warning bg-warning/10 px-3 py-2.5">
         <Volume2 className="h-5 w-5 shrink-0 text-warning" />
         <div className="truncate text-sm font-medium text-foreground/80">
-          Bem-vindo à <b>Netflilms</b> — convide amigos, invista e ganhe lucros diários ilimitados.
+          Bem-vindo à <b>Petromoc S.A</b> — convide amigos, invista e ganhe lucros diários ilimitados.
         </div>
       </section>
 
@@ -104,7 +104,7 @@ function HomePage() {
               <div className="min-w-0 flex-1">
                 <div className="truncate text-base font-bold">{v.title}</div>
                 <div className="mt-1 text-xs text-muted-foreground">
-                  Equipa: <span className="text-foreground">{v.team_name ?? "Netflilms"}</span>
+                  Equipa: <span className="text-foreground">{v.team_name ?? "Petromoc S.A"}</span>
                 </div>
                 <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                   Pontuação:

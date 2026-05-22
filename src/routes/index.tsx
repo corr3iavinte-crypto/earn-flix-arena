@@ -15,13 +15,13 @@ function Landing() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
             <div className="rounded-lg bg-white/15 p-2"><Play className="h-5 w-5 fill-current" /></div>
-            <span className="text-lg font-bold">Netflilms</span>
+            <span className="text-lg font-bold">Petromoc S.A</span>
           </div>
           <Link to="/login" className="rounded-lg bg-white/15 px-4 py-2 text-sm font-semibold backdrop-blur hover:bg-white/25">Entrar</Link>
         </div>
         <div className="mx-auto max-w-3xl px-4 pb-16 pt-12 text-center">
           <h1 className="text-4xl font-extrabold leading-tight md:text-5xl">Assista vídeos.<br /><span className="opacity-90">Ganhe dinheiro de verdade.</span></h1>
-          <p className="mx-auto mt-4 max-w-xl text-sm opacity-90 md:text-base">Plataforma Netflilms em Moçambique. Planos VIP a partir de 650 MZN. Retornos diários de 10% a 14%.</p>
+          <p className="mx-auto mt-4 max-w-xl text-sm opacity-90 md:text-base">Plataforma Petromoc S.A em Moçambique. Planos VIP a partir de 650 MZN. Retornos diários de 10% a 14%.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/signup" className="rounded-xl bg-white px-6 py-3 text-sm font-bold text-primary shadow-elegant hover:opacity-90">Criar conta grátis</Link>
             <Link to="/login" className="rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold backdrop-blur hover:bg-white/20">Já tenho conta</Link>
@@ -49,7 +49,7 @@ function Landing() {
       </section>
 
       <footer className="border-t bg-card py-6 text-center text-xs text-muted-foreground">
-        © 2026 Netflilms · Operado em Moçambique
+        © 2026 Petromoc S.A · Operado em Moçambique
       </footer>
     </div>
   );

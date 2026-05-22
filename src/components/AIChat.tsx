@@ -10,7 +10,7 @@ export function AIChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Olá! 👋 Sou a assistente da Netflilms. Como posso ajudar? Pergunte sobre planos VIP, depósitos, saques ou ganhos." },
+    { role: "assistant", content: "Olá! 👋 Sou a assistente da Petromoc S.A. Como posso ajudar? Pergunte sobre planos VIP, depósitos, saques ou ganhos." },
   ]);
   const ask = useServerFn(chatAI);
   const endRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export function AIChat() {
               <div className="flex items-center gap-2">
                 <div className="rounded-full bg-white/20 p-1.5"><Sparkles className="h-4 w-4" /></div>
                 <div>
-                  <div className="text-sm font-bold">Assistente Netflilms</div>
+                  <div className="text-sm font-bold">Assistente Petromoc S.A</div>
                   <div className="text-[10px] opacity-80">IA · sempre online</div>
                 </div>
               </div>

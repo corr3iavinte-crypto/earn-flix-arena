@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* Floating WhatsApp button */}
       <a
-        href={whatsappUrl(lang === "pt" ? "Olá! Preciso de ajuda na Netflilms." : "Hi! I need help on Netflilms.")}
+        href={whatsappUrl(lang === "pt" ? "Olá! Preciso de ajuda na Petromoc S.A." : "Hi! I need help on Petromoc S.A.")}
         target="_blank" rel="noreferrer"
         aria-label="WhatsApp"
         className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-elegant hover:scale-110 transition-transform"
@@ -100,7 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <aside className="relative flex h-full w-[88%] max-w-sm flex-col bg-sidebar text-sidebar-foreground">
             <div className="bg-gradient-header p-4 text-primary-foreground">
               <div className="flex items-center justify-between">
-                <span className="text-lg font-black tracking-wider">NETFLILMS</span>
+                <span className="text-lg font-black tracking-wider">PETROMOC S.A</span>
                 <button onClick={() => setOpen(false)} className="rounded-lg bg-white/15 p-2 hover:bg-white/25"><X className="h-5 w-5" /></button>
               </div>
               <div className="mt-4 flex items-center gap-3">
@@ -156,7 +156,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-xl border border-destructive/40 px-3 py-2.5 text-destructive hover:bg-destructive/10">
                 <LogOut className="h-5 w-5" /> <span className="font-semibold">{t("menu.logout")}</span>
               </button>
-              <div className="mt-3 text-center text-xs text-sidebar-foreground/40">Netflilms © 2026</div>
+              <div className="mt-3 text-center text-xs text-sidebar-foreground/40">Petromoc S.A © 2026</div>
             </div>
           </aside>
         </div>

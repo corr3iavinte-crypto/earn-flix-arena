@@ -160,8 +160,8 @@ function Plans() {
             <a
               href={whatsappUrl(
                 lang === "pt"
-                  ? `Olá! Acabei de ativar o ${activated.name} na Netflilms. Por favor confirmem.`
-                  : `Hi! I just activated ${activated.name} on Netflilms. Please confirm.`
+                  ? `Olá! Acabei de ativar o ${activated.name} na Petromoc S.A. Por favor confirmem.`
+                  : `Hi! I just activated ${activated.name} on Petromoc S.A. Please confirm.`
               )}
               target="_blank" rel="noreferrer"
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] py-3 font-bold text-white"

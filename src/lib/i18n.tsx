@@ -65,7 +65,7 @@ const Ctx = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (k: Key) 
   lang: "pt", setLang: () => {}, t: (k) => k,
 });
 
-export const WHATSAPP_NUMBER = "258876763395";
+export const WHATSAPP_NUMBER = "258858069930";
 export const whatsappUrl = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 

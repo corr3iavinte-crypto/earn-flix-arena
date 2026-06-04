@@ -213,21 +213,9 @@ function ConfirmPurchase({ plan, pending, onClose, onConfirm }: { plan: any; pen
         </div>
 
         <div className="mt-4 rounded-2xl border-l-4 border-primary bg-primary/5 p-3">
-          <div className="text-xs font-bold uppercase text-primary">📲 Número de transferência</div>
-          <p className="mt-1 text-xs text-muted-foreground">Se não tem saldo, faça o pagamento de <b>MT {Number(plan.price).toLocaleString("pt-PT")}</b> para um dos números abaixo:</p>
-          <div className="mt-2 space-y-1.5">
-            {PAYMENT_METHODS.map((m) => (
-              <div key={m.name} className="rounded-lg bg-card p-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold" style={{ color: m.color }}>{m.name}</span>
-                  <span className="font-mono text-base font-extrabold tracking-wider">{m.number}</span>
-                </div>
-                <div className="mt-0.5 text-[11px] text-muted-foreground">Titular: <b>{m.holder}</b></div>
-              </div>
-            ))}
-          </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">Depois envie o comprovativo na página de Depósito.</p>
+          <p className="text-xs text-muted-foreground">Se não tem saldo, vá à página de <b>Depósito</b> para carregar <b>MT {Number(plan.price).toLocaleString("pt-PT")}</b> e depois volte para confirmar a compra.</p>
         </div>
+
 
         <div className="mt-4 grid grid-cols-2 gap-2">
           <button onClick={onClose} className="rounded-full bg-muted py-3 text-sm font-bold">Cancelar</button>

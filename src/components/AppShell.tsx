@@ -45,7 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Menu className="h-5 w-5" />
           </button>
           <Link to="/home" className="text-xl font-black tracking-wider">
-            PETRO<span className="text-primary">MOC</span> S.A
+            NET<span className="text-primary">FILMES</span>
           </Link>
           <div className="flex items-center gap-2">
             <NotificationsBell />

@@ -25,7 +25,7 @@ export function NotificationsBell() {
     for (const n of items) {
       if (!seenRef.current.has(n.id)) {
         seenRef.current.add(n.id);
-        try { new Notification("Petromoc S.A", { body: n.title, icon: "/netflix-bg.jpg" }); } catch {}
+        try { new Notification("NETFILMES", { body: n.title, icon: "/netflix-bg.jpg" }); } catch {}
       }
     }
   }, [items]);

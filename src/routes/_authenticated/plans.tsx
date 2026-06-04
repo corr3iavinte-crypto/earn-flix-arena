@@ -178,10 +178,8 @@ function Plans() {
   );
 }
 
-const PAYMENT_METHODS = [
-  { name: "M-Pesa (Vodacom)", number: "850366384", holder: "Orlando Salange", color: "#ef4444" },
-  { name: "e-Mola (Movitel)", number: "872110481", holder: "Saide Omar", color: "#f59e0b" },
-];
+
+
 
 function ConfirmPurchase({ plan, pending, onClose, onConfirm }: { plan: any; pending: boolean; onClose: () => void; onConfirm: () => void }) {
   const accent = plan.accent_color?.startsWith("#") ? plan.accent_color : "#f97316";
